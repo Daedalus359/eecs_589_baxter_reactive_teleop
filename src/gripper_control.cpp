@@ -14,15 +14,15 @@ ros::Publisher gripper_publisher;
 void polarisCB(const geometry_msgs::PoseArray& targets) 
 { 
 	//TODO
-	baxter_core_msgs::EndEffectorCommand> controlled_grip;
+	baxter_core_msgs::EndEffectorCommand controlled_grip;
 	double distance;
 
-	distance=sqrt(pow(targets.pose[0].position.x-targets.pose[1].position.x)+pow(targets.pose[0].position.y-targets.pose[1].position.y)+pow(targets.pose[0].position.z-targets.pose[1].position.z));
+	distance=sqrt(pow(targets.poses[0].position.x-targets.poses[1].position.x,2)+pow(targets.poses[0].position.y-targets.poses[1].position.y,2)+pow(targets.poses[0].position.z-targets.poses[1].position.z,2));
 
 
-	controlled_grip.command= controlled_grip.CMD_GO
+	controlled_grip.command= controlled_grip.CMD_GO;
 	controlled_grip.id= 65538; //65664  echo the topic 'robot/end_effector/' + name + '/state'
-	controlled_grip.args.position=distance;
+	controlled_grip.command=distance;
 	controlled_grip.sequence = 3;//1
 	controlled_grip.sender = "/grasp_node";
 
@@ -35,7 +35,7 @@ int main(int argc, char **argv){
 	ros::NodeHandle n; 
 
 	ros::Subscriber polaris_subscriber= n.subscribe("targets",1,polarisCB); 
-	ros::Publisher gripper_pub = nh.advertise<baxter_core_msgs/EndEffectorCommand>("/robot/end_effector/left_gripper/command", 1);
+	ros::Publisher gripper_pub = n.advertise<baxter_core_msgs::EndEffectorCommand>("/robot/end_effector/left_gripper/command", 1);
 	gripper_publisher=gripper_pub;
 	
 	ros::Rate naptime(1);
@@ -45,6 +45,7 @@ int main(int argc, char **argv){
 
 
 	ros::spin(); 
+
 	return 0;
 }
 	 

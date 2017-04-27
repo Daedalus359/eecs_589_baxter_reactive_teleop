@@ -32,8 +32,8 @@ catkin_simple()
 # Executables: uncomment the following and edit arguments to compile new nodes
 # may add more of these lines for more nodes from the same package
 # cs_add_executable(example src/example.cpp)
-#cs_add_executable(polaris_transformation src/polaris_transformation.cpp)
-#cs_add_executable(gripper_control src/gripper_control.cpp)
+cs_add_executable(polaris_transformation src/polaris_transformation.cpp)
+cs_add_executable(gripper_control src/gripper_control.cpp)
 
 
 #the following is required, if desire to link a node in this package with a library created in this same package
