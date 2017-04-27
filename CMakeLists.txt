@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(EECS_589_baxter_reactive_manupilation)
+project(eecs_589_baxter_reactive_teleop)
 
 find_package(catkin_simple REQUIRED)
 
@@ -32,6 +32,9 @@ catkin_simple()
 # Executables: uncomment the following and edit arguments to compile new nodes
 # may add more of these lines for more nodes from the same package
 # cs_add_executable(example src/example.cpp)
+cs_add_executable(polaris_transformation src/polaris_transformation.cpp)
+cs_add_executable(gripper_control src/gripper_control.cpp)
+
 
 #the following is required, if desire to link a node in this package with a library created in this same package
 # edit the arguments to reference the named node and named library within this package

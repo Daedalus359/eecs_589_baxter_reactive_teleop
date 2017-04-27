@@ -43,7 +43,7 @@ void polarisCB(const geometry_msgs::PoseArray& targets)
 
 
 	right_finger_publisher.publish(right_pose);
-	right_finger_publisher.publish(right_pose);
+	left_finger_publisher.publish(left_pose);
 
 }
 int main(int argc, char **argv){
@@ -52,9 +52,9 @@ int main(int argc, char **argv){
 
 	ros::Subscriber polaris_subscriber= n.subscribe("targets",1,polarisCB); 
 	ros::Publisher right_finger_pub = nh.advertise<geometry_msgs::PoseArray>("right_finger_wrt_polaris", 1);
-	right_finger_pub.publish(right_pose); 
+	right_finger_publisher= right_finger_pub;
 	ros::Publisher left_finger_pub = nh.advertise<geometry_msgs::PoseArray>("left_finger_wrt_polaris", 1);
-	left_finger_pub.publish(left_pose); 
+	left_finger_publisher= left_finger_pub;
 	
 	ros::Rate naptime(1);
 

@@ -34,7 +34,7 @@ int main(int argc, char **argv){
 
 	ros::Subscriber polaris_subscriber= n.subscribe("targets",1,polarisCB); 
 	ros::Publisher gripper_pub = nh.advertise<baxter_core_msgs/EndEffectorCommand>("/robot/end_effector/left_gripper/command", 1);
-	gripper_publisher.publish(right_pose); 
+	gripper_publisher=gripper_pub;
 	
 	ros::Rate naptime(1);
 
