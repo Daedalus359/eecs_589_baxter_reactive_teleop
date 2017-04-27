@@ -18,28 +18,28 @@ void polarisCB(const geometry_msgs::PoseArray& targets)
 	right_pose.header.stamp = targets.header.stamp;
 	right_pose.header.frame_id = "/base";
 
-	right_pose.pose.position.x=targets.pose[0].position.x;
-	right_pose.pose.position.y=targets.pose[0].position.y;
-	right_pose.pose.position.z=-targets.pose[0].position.z;
+	right_pose.poses.position.x=targets.pose[0].point.x;
+	right_pose.poses.position.y=targets.pose[0].point.y;
+	right_pose.poses.position.z=-targets.pose[0].point.z;
 
-	right_pose.pose.orientation.x=targets.pose[0].orientation.x;
-	right_pose.pose.orientation.y=-targets.pose[0].orientation.y;
-	right_pose.pose.orientation.z=-targets.pose[0].orientation.z;
-	right_pose.pose.orientation.w=-targets.pose[0].orientation.w;
+	right_pose.poses.orientation.x=targets.pose[0].quaternion.x;
+	right_pose.poses.orientation.y=-targets.pose[0].quaternion.y;
+	right_pose.poses.orientation.z=-targets.pose[0].quaternion.z;
+	right_pose.poses.orientation.w=-targets.pose[0].quaternion.w;
 
 
 
 	left_pose.header.stamp = targets.header.stamp;
 	left_pose.header.frame_id = "/base";
 
-	left_pose.pose.position.x=targets.pose[1].position.x;
-	left_pose.pose.position.y=targets.pose[1].position.y;
-	left_pose.pose.position.z=-targets.pose[1].position.z;
+	left_pose.poses.position.x=targets.pose[1].point.x;
+	left_pose.poses.position.y=targets.pose[1].point.y;
+	left_pose.poses.position.z=-targets.pose[1].point.z;
 
-	left_pose.pose.orientation.x=targets.pose[1].orientation.x;
-	left_pose.pose.orientation.y=-targets.pose[1].orientation.y;
-	left_pose.pose.orientation.z=-targets.pose[1].orientation.z;
-	left_pose.pose.orientation.w=-targets.pose[1].orientation.w;
+	left_pose.poses.orientation.x=targets.pose[1].quaternion.x;
+	left_pose.poses.orientation.y=-targets.pose[1].quaternion.y;
+	left_pose.poses.orientation.z=-targets.pose[1].quaternion.z;
+	left_pose.poses.orientation.w=-targets.pose[1].quaternion.w;
 
 
 	right_finger_publisher.publish(right_pose);

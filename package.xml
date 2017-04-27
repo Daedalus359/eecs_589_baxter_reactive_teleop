@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package>
-  <name>EECS_589_baxter_reactive_manupilation</name>
+  <name>eecs_589_baxter_reactive_teleop</name>
   <version>0.0.0</version>
-  <description>The EECS_589_baxter_reactive_manupilation package</description>
+  <description>The eecs_589_baxter_reactive_teleop package</description>
   
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
   <!-- Example:  -->

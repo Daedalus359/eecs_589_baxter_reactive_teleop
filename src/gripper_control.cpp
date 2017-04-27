@@ -1,5 +1,7 @@
 #include <ros/ros.h> 
 #include <std_msgs/Float64.h> 
+#include <geometry_msgs/PoseArray.h>
+
 #include "baxter_core_msgs/EndEffectorCommand.h"
 #include "baxter_core_msgs/EndEffectorState.h"
 
