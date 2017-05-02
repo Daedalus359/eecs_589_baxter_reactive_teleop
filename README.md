@@ -12,3 +12,6 @@ rostopic echo /polaris_sensor/targets
 
 rosrun eecs_589_baxter_reactive_teleop polaris_transformation
 rosrun eecs_589_baxter_reactive_teleop gripper_control
+
+rostopic echo /left_finger_wrt_polaris
+rostopic echo /right_finger_wrt_polaris 

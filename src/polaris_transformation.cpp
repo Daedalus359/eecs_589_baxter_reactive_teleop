@@ -22,6 +22,7 @@ void polarisCB(const geometry_msgs::PoseArray& targets)
 	right_pose.header.stamp = targets.header.stamp;
 	right_pose.header.frame_id = "/base";
 
+
 	temp_pose.pose.position.x=targets.poses[0].position.x;
 	temp_pose.pose.position.y=targets.poses[0].position.y;
 	temp_pose.pose.position.z=-targets.poses[0].position.z;
@@ -31,8 +32,10 @@ void polarisCB(const geometry_msgs::PoseArray& targets)
 	temp_pose.pose.orientation.z=-targets.poses[0].orientation.z;
 	temp_pose.pose.orientation.w=-targets.poses[0].orientation.w;
 
-	right_pose.poses[0]=temp_pose.pose;
+	ROS_INFO("Right x= %f y= %f z= %f",temp_pose.pose.position.x,temp_pose.pose.position.y,temp_pose.pose.position.z);
 
+
+	right_pose.poses.push_back(temp_pose.pose);
 
 	left_pose.header.stamp = targets.header.stamp;
 	left_pose.header.frame_id = "/base";
@@ -46,9 +49,10 @@ void polarisCB(const geometry_msgs::PoseArray& targets)
 	temp_pose.pose.orientation.z=-targets.poses[1].orientation.z;
 	temp_pose.pose.orientation.w=-targets.poses[1].orientation.w;
 
+	ROS_INFO("Left x= %f y= %f z= %f",temp_pose.pose.position.x,temp_pose.pose.position.y,temp_pose.pose.position.z);
 
-	left_pose.poses[0]=temp_pose.pose;
 
+	left_pose.poses.push_back(temp_pose.pose);
 
 	//ROS_INFO("left %f right %f",left_pose.poses[0].position.x, right_pose.poses[0].position.x );
 
