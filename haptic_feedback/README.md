@@ -1,3 +1,6 @@
+##Summary of Package
+The purpose of this package is to provide a node that subscribes to a force sensor on baxter's gripper, then translates the amount of force felt into an audio feedback signal. This signal is to be played through modified earbuds that are placed against the index finger and thumb, thus causing the audio to be experienced as haptic feedback.
+
 ## Using the haptic feedback:
 it appears that sound will play from the computer running the soundplay node, even when on baxter_master. Therefore, the audio cable for the haptic feedback earbuds should be plugged into this same computer.
 
@@ -19,6 +22,6 @@ This node will verify whether all sound files are in the right place for use in 
 
 If this did not work, please make sure that you have the provided wav files in the right location. By default, the program looks for them in:
 
- /home/kevinbradner/ros_ws/src/eecs_589_baxter_reactive_teleop/wav_files/250hz_tenth_vol1.wav
+ /home/kevinbradner/ros_ws/src/eecs_589_baxter_reactive_teleop/haptic_feedback/wav_files/250hz_tenth_vol1.wav
 
 If you wish to change this, simply write the correct path to the sound files for your machine and recompile.
