@@ -13,7 +13,7 @@ Please note that some TCP/IP error occasionally causes soundplay_node to require
 
 Next, you can execute the following command:
 
-	rosrun eecs_589_baxter_reactive_teleop play_sounds
+	rosrun haptic_feedback play_sounds
 
 This node will verify whether all sound files are in the right place for use in the actual haptic feedback. Listening during execution of this node, you should hear a brief pulse of sound once every second.
 
