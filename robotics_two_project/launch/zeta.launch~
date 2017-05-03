@@ -1,0 +1,4 @@
+ <launch>
+  <include file="$(find freenect_launch)/launch/freenect.launch" output="screen"/>
+  <include file="$(find coordinator)/launch/coord_vision_manip2.launch" output="screen"/>
+</launch>
