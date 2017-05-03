@@ -31,8 +31,11 @@ void polarisCB(const geometry_msgs::PoseArray& targets)
 	controlled_grip.sequence = 3;//1
 	controlled_grip.sender = "/grasp_node";
 
-
+	ros::Time start =  ros::Time::now();   
+	while((ros::Time::now() - start) < ros::Duration(1)) {
 	gripper_publisher.publish(controlled_grip);
+	//ros::Duration(0.05);
+	}
 
 }
 int main(int argc, char **argv){

@@ -1,10 +1,10 @@
-// Zeta coordinator
-// December, 2016
+
 
 #include<ros/ros.h>
 #include <baxter_fk_ik/baxter_kinematics.h>
 #include <cartesian_planner/baxter_cartesian_planner.h>
 #include <baxter_trajectory_streamer/baxter_trajectory_streamer.h>
+#include <math.h>
 
 #include<baxter_trajectory_streamer/trajAction.h>
 #include <actionlib/client/simple_action_client.h>
@@ -55,6 +55,10 @@ void get_polaris_frame_callBack(const geometry_msgs::PoseArray &polaris_pose) {
     //will require that "system_ref_frame" is known to tf
     //g_des_flange_pose_stamped_wrt_torso.header.frame_id = arm_pose.header.frame_id; //set object pose; ref frame must be connected via tf
 
+
+
+    if (isnan(polaris_pose.poses[0].position.x) == 0){
+
     g_des_flange_pose_stamped_wrt_torso.poses.clear();
 
     temp_pose.pose.position.x = polaris_pose.poses[0].position.x;
@@ -74,6 +78,7 @@ void get_polaris_frame_callBack(const geometry_msgs::PoseArray &polaris_pose) {
 
     // adjust the polaris frame to represent the transformation between the two
     get_polaris = true;
+    }
 
 }
 
@@ -87,7 +92,7 @@ int main(int argc, char** argv) {
     ros::NodeHandle nh; //standard ros node handle
 
     // Subscribe to the polaris node to get new values for the position of the arm
-    ros::Subscriber sub = nh.subscribe("index_finger_pose_wrt_polaris", 1, get_polaris_frame_callBack);
+    ros::Subscriber sub = nh.subscribe("right_finger_wrt_polaris", 1, get_polaris_frame_callBack);
 
     // Tool flange positions
     Eigen::Affine3d a_toolflange_start, a_toolflange_end;

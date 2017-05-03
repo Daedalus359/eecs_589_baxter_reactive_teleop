@@ -34,6 +34,7 @@ catkin_simple()
 # cs_add_executable(example src/example.cpp)
 cs_add_executable(polaris_transformation src/polaris_transformation.cpp)
 cs_add_executable(gripper_control src/gripper_control.cpp)
+cs_add_executable(gripper_test src/gripper_test.cpp)
 
 
 #the following is required, if desire to link a node in this package with a library created in this same package

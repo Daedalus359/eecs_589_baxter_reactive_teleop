@@ -18,14 +18,16 @@ void polarisCB(const geometry_msgs::PoseArray& targets)
 	geometry_msgs::PoseArray left_pose;
 
 	geometry_msgs::PoseStamped temp_pose;
+	
+	double amp_factor=1;
 
 	right_pose.header.stamp = targets.header.stamp;
 	right_pose.header.frame_id = "/base";
 
 
-	temp_pose.pose.position.x=targets.poses[0].position.x;
-	temp_pose.pose.position.y=targets.poses[0].position.y;
-	temp_pose.pose.position.z=-targets.poses[0].position.z;
+	temp_pose.pose.position.z=-amp_factor*targets.poses[0].position.x;
+	temp_pose.pose.position.y=amp_factor*targets.poses[0].position.y;
+	temp_pose.pose.position.x=amp_factor*(1.5+targets.poses[0].position.z);
 
 	temp_pose.pose.orientation.x=targets.poses[0].orientation.x;
 	temp_pose.pose.orientation.y=-targets.poses[0].orientation.y;
@@ -40,9 +42,9 @@ void polarisCB(const geometry_msgs::PoseArray& targets)
 	left_pose.header.stamp = targets.header.stamp;
 	left_pose.header.frame_id = "/base";
 
-	temp_pose.pose.position.x=targets.poses[1].position.x;
-	temp_pose.pose.position.y=targets.poses[1].position.y;
-	temp_pose.pose.position.z=-targets.poses[1].position.z;
+	temp_pose.pose.position.z=-amp_factor*targets.poses[1].position.x;
+	temp_pose.pose.position.y=amp_factor*targets.poses[1].position.y;
+	temp_pose.pose.position.x=amp_factor*(1.5+targets.poses[0].position.z);
 
 	temp_pose.pose.orientation.x=targets.poses[1].orientation.x;
 	temp_pose.pose.orientation.y=-targets.poses[1].orientation.y;
