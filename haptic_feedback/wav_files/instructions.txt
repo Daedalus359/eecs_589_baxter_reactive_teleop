@@ -1,9 +1,0 @@
-Best version:
-
-sudo apt-get install ros-indigo-audio-common
-
-see http://docs.ros.org/api/sound_play/html/msg/SoundRequest.html
-
-looks like I need to continually play my 250 hz 0.1 second tone at a volume which comes from the robot force information.
-
-put grip_force_to_sound.cpp into a package and compile it
