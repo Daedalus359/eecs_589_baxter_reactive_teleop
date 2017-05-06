@@ -12,7 +12,7 @@ To test this, you may wish to use an ordinary set of earbuds or speakers, and ru
 	rosrun sound_play say.py "hello world"
 
 If everything is working, you should hear "hello world" said through the speakers.
-Please note that some TCP/IP error occasionally causes soundplay_node to require a restart.
+Please note that some TCP/IP error occasionally causes soundplay_node to require a restart. The whole system is also troublesome. Restarting the robot and the computer being used often helps.
 
 Next, you can execute the following command:
 
