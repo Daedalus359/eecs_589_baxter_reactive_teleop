@@ -294,9 +294,9 @@ ros::Duration(0.01).sleep();
            ros::spinOnce();
            ros::Duration(0.01).sleep();
            
-           if (counter > 0 && get_polaris){
-            g_done_count = 1;
-           }
+           //if (counter > 10 && get_polaris){
+            //g_done_count = 1;
+           //}
            counter++;
        }
        g_done_count = 0;

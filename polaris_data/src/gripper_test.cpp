@@ -39,9 +39,12 @@ int main(int argc, char **argv){
 	//ros::Time start =  ros::Time::now();   
     
     while(ros::ok()) {
-		gripper.publish(grab);
+		ros::Time start =  ros::Time::now();   
+		while((ros::Time::now() - start) < ros::Duration(3)) {
+			gripper.publish(grab);
+		}
 		ros::spinOnce(); 
-    	naptime.sleep();
+		naptime.sleep();
 
     }
 
