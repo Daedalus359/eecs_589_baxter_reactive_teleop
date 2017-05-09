@@ -36,12 +36,6 @@ rostopic pub -1 /robot/end_effector/right_gripper/command baxter_core_msgs/EndEf
 Echoing /right_gripper/state topic:
 rostopic echo /robot/end_effector/right_gripper/state
 
-## Running baxter controller
-
-rosrun baxter_tools enable_robot.py -e
-rosrun baxter_trajectory_streamer rt_arm_as
-rosrun baxter_trajectory_streamer left_arm_as
-rosrun robotics_two_project robotics_two_coordinator
 
 ## baxter simulator
 roslaunch baxter_gazebo baxter_world.launch

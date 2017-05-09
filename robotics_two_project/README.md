@@ -1,3 +1,7 @@
+## robotics_two_project
+
+This package includes two 
+
 ## Running baxter controller
 
 rosrun baxter_tools enable_robot.py -e
