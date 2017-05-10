@@ -22,6 +22,7 @@ int g_object_finder_return_code = 0;
 int g_fdbk_count = 0;
 int g_objectid;
 bool get_polaris = false;
+bool is_nan = false;
 
 geometry_msgs::PoseArray g_des_flange_pose_stamped_wrt_torso;
 geometry_msgs::PoseStamped temp_pose;
@@ -251,7 +252,17 @@ ros::Duration(0.01).sleep();
 	// repopulate desired arm position from polaris input
 	des_path_right.clear();
         q_vec_right_arm = baxter_traj_streamer.get_q_vec_right_arm_Xd();
-   	current_location = baxter_fwd_solver.fwd_kin_flange_wrt_torso_solve(q_vec_right_arm);
+    for(int i = 0; i < 7; ++i){
+		if (isnan(q_vec_right_arm[i]) == 1){
+			is_nan = true;
+		}
+	}
+	
+	if (!is_nan){
+		current_location = baxter_fwd_solver.fwd_kin_flange_wrt_torso_solve(q_vec_right_arm);
+	}
+	is_nan = false;
+   	
    	std::cout << current_location.translation() << std::endl;
 	ROS_INFO("Current joint position");
 	std::cout << q_vec_right_arm << std::endl;

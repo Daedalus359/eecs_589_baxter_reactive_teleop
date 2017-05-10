@@ -44,7 +44,7 @@ void polarisCB(const geometry_msgs::PoseArray& targets)
 
 	temp_pose.pose.position.z=-amp_factor*targets.poses[1].position.x;
 	temp_pose.pose.position.y=amp_factor*targets.poses[1].position.y;
-	temp_pose.pose.position.x=amp_factor*(1.5+targets.poses[0].position.z);
+	temp_pose.pose.position.x=amp_factor*(1.5+targets.poses[1].position.z);
 
 	temp_pose.pose.orientation.x=targets.poses[1].orientation.x;
 	temp_pose.pose.orientation.y=-targets.poses[1].orientation.y;

@@ -34,12 +34,16 @@ void polarisCB(const geometry_msgs::PoseArray& targets)
 	else if(conv_dist>0 && conv_dist<100){
 		map_dist=conv_dist;
 	}
+	ROS_INFO("Right x= %f y= %f z= %f",targets.poses[0].position.x,targets.poses[0].position.y,targets.poses[0].position.z);
+	ROS_INFO("Left x= %f y= %f z= %f",targets.poses[1].position.x,targets.poses[1].position.y,targets.poses[1].position.z);
+	ROS_INFO("mapped_dist= %f",map_dist);
+	
 
 
 }
 
 int main(int argc, char **argv){
-	ros::init(argc,argv,"polaris_transformation");
+	ros::init(argc,argv,"gripper_control");
 	ros::NodeHandle n; 
 
 	ros::Subscriber polaris_subscriber= n.subscribe("/polaris_sensor/targets",1,polarisCB); 
@@ -59,6 +63,10 @@ int main(int argc, char **argv){
 		args << "{\"position\":" << map_dist << ", \"dead zone\": 5.0, \"force\": 40.0, \"holding force\": 30.0, \"velocity\": 50.0}";
 		
 		
+		//controlled_grip.command= baxter_core_msgs::EndEffectorCommand::CMD_RESET;
+		//naptime.sleep();
+		//controlled_grip.command= baxter_core_msgs::EndEffectorCommand::CMD_CALIBRATE;
+		//naptime.sleep();
 		controlled_grip.command= baxter_core_msgs::EndEffectorCommand::CMD_GO;	
 		controlled_grip.id= 65538; //65664  echo the topic 'robot/end_effector/' + name + '/state'
 		controlled_grip.command=args.str();//{"position":map_dist};
@@ -71,7 +79,6 @@ int main(int argc, char **argv){
 			gripper_pub.publish(controlled_grip);
 			//ros::Duration(0.05);
 		}
-		ROS_INFO("mapped_dist= %f",map_dist);
 		ros::spinOnce(); 
 		naptime.sleep();
 	}
