@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(eecs_589_baxter_reactive_teleop)
+project(polaris_data)
 
 find_package(catkin_simple REQUIRED)
 
@@ -35,7 +35,8 @@ catkin_simple()
 cs_add_executable(polaris_transformation src/polaris_transformation.cpp)
 cs_add_executable(gripper_control src/gripper_control.cpp)
 cs_add_executable(gripper_test src/gripper_test.cpp)
-
+cs_add_executable(gripper_server src/gripper_server.cpp)
+cs_add_executable(gripper_client src/gripper_client.cpp)
 
 #the following is required, if desire to link a node in this package with a library created in this same package
 # edit the arguments to reference the named node and named library within this package

@@ -17,18 +17,23 @@ To echo polaris sensor data:
 rostopic echo /polaris_sensor/targets
 
 Run this code to fix polaris transformation and publish /right_finger_wrt_polaris and /left_finger_wrt_polaris:
-rosrun eecs_589_baxter_reactive_teleop polaris_transformation
+rosrun polaris_data polaris_transformation
 
 ## Gripper code running and testing
 
 enable baxter before running gripper code using:
 rosrun baxter_tools enable_robot.py -e
 
+----------------------
 Run positional gripper control:
-rosrun eecs_589_baxter_reactive_teleop gripper_control
-
-Run binary gripper control:
-rosrun eecs_589_baxter_reactive_teleop gripper_test
+rosrun polaris_data gripper_control
+----------------------
+or Run binary gripper control:
+rosrun polaris_data gripper_test
+-----------------------
+or Run positional gripper service:
+rosrun polaris_data gripper_server
+rosrun polaris_data gripper_client
 
 manual positional gripper control:
 rostopic pub -1 /robot/end_effector/right_gripper/command baxter_core_msgs/EndEffectorCommand '{ id :  65538,  command : go, args : "{ \"position\": 50.0, \"dead zone\": 5.0, \"force\": 40.0, \"holding force\": 30.0, \"velocity\": 50.0}", sender : "foo", "sequence" : 1 }'
