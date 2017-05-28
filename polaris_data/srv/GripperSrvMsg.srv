@@ -1,0 +1,7 @@
+#created by Ammar Nahari
+
+#GripperSrvMsg accepts position of baxter gripper as a request
+float64 grip_pos
+---
+#the response, return true if bath done 
+bool grip_done
