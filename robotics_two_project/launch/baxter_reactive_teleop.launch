@@ -1,0 +1,13 @@
+<launch> 
+
+<node pkg= "polaris_data" type= "polaris_transformation" name= "polaris_transformation" output="screen"/> 
+
+<node pkg= "polaris_data" type= "gripper_control" name= "gripper_control" output="screen"/> 
+
+<node pkg= "baxter_trajectory_streamer" type= "rt_arm_as" name= "rt_arm_as" output="screen"/> 
+
+<node pkg= "baxter_trajectory_streamer" type= "left_arm_as" name= "left_arm_as" output="screen"/> 
+
+<node pkg= "robotics_two_project" type= "robotics_two_coordinator" name= "robotics_two_coordinator" output="screen"/> 
+
+</launch> 

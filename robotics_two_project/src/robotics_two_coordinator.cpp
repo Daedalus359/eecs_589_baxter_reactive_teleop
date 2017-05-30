@@ -62,8 +62,10 @@ void get_polaris_frame_callBack(const geometry_msgs::PoseArray &polaris_pose) {
 
     g_des_flange_pose_stamped_wrt_torso.poses.clear();
 
-    temp_pose.pose.position.x = polaris_pose.poses[0].position.x;
-    temp_pose.pose.position.y = polaris_pose.poses[0].position.y;
+    //Ammar added offsets in the pos x and neg y directions
+
+    temp_pose.pose.position.x = 0.2 + polaris_pose.poses[0].position.x;
+    temp_pose.pose.position.y = polaris_pose.poses[0].position.y-0.1;
     temp_pose.pose.position.z = polaris_pose.poses[0].position.z;
     
     g_des_flange_pose_stamped_wrt_torso.poses.push_back(temp_pose.pose);
@@ -93,7 +95,7 @@ int main(int argc, char** argv) {
     ros::NodeHandle nh; //standard ros node handle
 
     // Subscribe to the polaris node to get new values for the position of the arm
-    ros::Subscriber sub = nh.subscribe("right_finger_wrt_polaris", 1, get_polaris_frame_callBack);
+    ros::Subscriber sub = nh.subscribe("left_finger_wrt_polaris", 1, get_polaris_frame_callBack);
 
     // Tool flange positions
     Eigen::Affine3d a_toolflange_start, a_toolflange_end;

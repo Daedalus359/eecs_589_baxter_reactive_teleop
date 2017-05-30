@@ -8,6 +8,7 @@
 
 ros::Publisher right_finger_publisher;
 ros::Publisher left_finger_publisher;
+bool get_polaris = false;
 
 
 void polarisCB(const geometry_msgs::PoseArray& targets) 
@@ -62,6 +63,9 @@ void polarisCB(const geometry_msgs::PoseArray& targets)
 	right_finger_publisher.publish(right_pose);
 	left_finger_publisher.publish(left_pose);
 
+	get_polaris = true;
+
+
 }
 int main(int argc, char **argv){
 	
@@ -77,7 +81,12 @@ int main(int argc, char **argv){
 	left_finger_publisher= left_finger_pub;
 	
 	//ros::Rate naptime(1);
+	while(get_polaris == false){
+	ROS_WARN("waiting on polaris callback");
+	ros::spinOnce();
+	ros::Duration(1.0).sleep();
 
+	}
 
 	//naptime.sleep();
 

@@ -11,6 +11,8 @@
 
 //ros::Publisher gripper_publisher;
 double map_dist;
+bool get_polaris = false;
+
 //variable for mapping the distance to the position of the gripper
 
 
@@ -42,7 +44,7 @@ void polarisCB(const geometry_msgs::PoseArray& targets)
 	ROS_INFO("Left x= %f y= %f z= %f",targets.poses[1].position.x,targets.poses[1].position.y,targets.poses[1].position.z);
 	ROS_INFO("mapped_dist= %f",map_dist);
 	
-
+	get_polaris = true;
 }
 
 int main(int argc, char **argv){
@@ -50,6 +52,13 @@ int main(int argc, char **argv){
 	ros::NodeHandle n;
 
 	ros::Subscriber polaris_subscriber= n.subscribe("/polaris_sensor/targets",1,polarisCB); 
+
+	while(get_polaris == false){
+	ROS_WARN("waiting on polaris callback");
+	ros::spinOnce();
+	ros::Duration(1.0).sleep();
+
+	}
 
 	while(ros::ok()) {
 
