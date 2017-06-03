@@ -29,10 +29,15 @@ geometry_msgs::PoseStamped temp_pose;
 coordinator::ManipTaskResult g_result;
 
 
+//ros::Publisher g_action_pub;//global action
+baxter_core_msgs::JointCommand cmd;
+
+
 using namespace std;
 
 int g_done_count=0;
-void rightArmDoneCb(const actionlib::SimpleClientGoalState& state, const baxter_trajectory_streamer::trajResultConstPtr& result) {
+void rightArmDoneCb(const actionlib::SimpleClientGoalState& state,
+        const baxter_trajectory_streamer::trajResultConstPtr& result) {
     ROS_INFO(" rtArmDoneCb: server responded with state [%s]", state.toString().c_str());
     ROS_INFO("got return val = %d", result->return_val);
     g_done_count++;
@@ -87,10 +92,31 @@ void get_polaris_frame_callBack(const geometry_msgs::PoseArray &polaris_pose) {
 geometry_msgs::PoseArray get_polaris_arm_pose() {
     return g_des_flange_pose_stamped_wrt_torso;
 }
+/*/---------------------------------------------------------------------------------------------
+void path_action(std::vector<Eigen::VectorXd> optimal_path){
 
+    ros::Time start = ros::Time::now();
+    ros::Rate loop_rate(100);
 
+    for(int k=optimal_path.size()-1; k>-1;k--){ //to avoid parent index       
+        for(int i=0; i<7; i++){
+            cmd.command[i]=optimal_path[k][i];
+        }
+
+        start = ros::Time::now();
+        while((ros::Time::now() - start) < ros::Duration(0.001)) {
+            g_action_pub.publish(cmd);
+            //ros::spinOnce();
+            loop_rate.sleep();
+
+        }
+    }
+
+}
+/*/
+//---------------------------------------------------------------------------------------------
 int main(int argc, char** argv) {
-    ros::init(argc, argv, "robotics_two_coordinator"); // name this node 
+    ros::init(argc, argv, "ammar_coordinator"); // name this node 
     ros::NodeHandle nh; //standard ros node handle
 
     // Subscribe to the polaris node to get new values for the position of the arm
@@ -100,6 +126,21 @@ int main(int argc, char** argv) {
     Eigen::Affine3d a_toolflange_start, a_toolflange_end;
     std::vector<Eigen::VectorXd> optimal_path;
     trajectory_msgs::JointTrajectory des_trajectory_right;
+
+    ros::Publisher action_publisher = nh.advertise<baxter_core_msgs::JointCommand>("/robot/limb/right/joint_command",1);
+    //g_action_pub = action_publisher;
+
+    cmd.mode = baxter_core_msgs::JointCommand::POSITION_MODE;
+
+    cmd.names.push_back("left_s0");
+    cmd.names.push_back("left_s1");
+    cmd.names.push_back("left_e0");
+    cmd.names.push_back("left_e1");
+    cmd.names.push_back("left_w0");
+    cmd.names.push_back("left_w1");
+    cmd.names.push_back("left_w2");
+
+    cmd.command.resize(cmd.names.size());
 
     // Get the geometry message of the pose from polaris
     geometry_msgs::PoseArray polaris_pose;
@@ -147,6 +188,7 @@ int main(int argc, char** argv) {
         ros::spinOnce();
         ros::Duration(1.0).sleep();
         server_exists = right_arm_action_client.waitForServer(ros::Duration(1.0));
+        break;
     }
     ROS_INFO("connected to right-arm action server"); // if here, then we connected to the server; 
 
@@ -156,10 +198,11 @@ int main(int argc, char** argv) {
     // wait to get first message from callback
 
     while(get_polaris == false){
-        ROS_WARN("waiting on polaris callback");
-        ros::spinOnce();
-        ros::Duration(1.0).sleep();
-    }
+    	ROS_WARN("waiting on polaris callback");
+    	ros::spinOnce();
+    	ros::Duration(1.0).sleep();
+
+	}
 
 
     Eigen::Affine3d current_location;
@@ -212,29 +255,28 @@ int main(int argc, char** argv) {
 
     if (found_path) {
         ROS_INFO("found patf");
-        des_path_right.push_back(optimal_path[0]);
-        baxter_traj_streamer.stuff_trajectory_right_arm(optimal_path, des_trajectory_right);
-        //  copy traj to goal:
-        goal_right.trajectory = des_trajectory_right;
+    	des_path_right.push_back(optimal_path[0]);
+    	baxter_traj_streamer.stuff_trajectory_right_arm(optimal_path, des_trajectory_right);
+    	//  copy traj to goal:
+    	goal_right.trajectory = des_trajectory_right;
 
-        ROS_INFO("sending goals to left and right arms: ");
-        right_arm_action_client.sendGoal(goal_right, &rightArmDoneCb); 
+    	ROS_INFO("sending goals to left and right arms: ");
+    	right_arm_action_client.sendGoal(goal_right, &rightArmDoneCb); 
 
 
-        while (g_done_count<1) {
-            ROS_INFO("waiting to finish current move");
+    	while (g_done_count<1) {
+       		ROS_INFO("waiting to finish current move");
             ros::spinOnce();
-            ros::Duration(0.01).sleep();
-        }
+       		ros::Duration(0.01).sleep();
+    	}
 
-        g_done_count = 0;
-    
+    g_done_count = 0;
+	
     }
     else {
         ROS_WARN("no path found");
         ros::Duration(0.01).sleep();
     }
-
 
     //ros::spinOnce();
     //cout<<"right arm is at: "<<baxter_traj_streamer.get_q_vec_right_arm_Xd().transpose()<<endl;
@@ -244,89 +286,108 @@ int main(int argc, char** argv) {
 
     
     while (ros::ok()) {
-        // repopulate desired arm position from polaris input
-        des_path_right.clear();
-
+    	// repopulate desired arm position from polaris input
+    	des_path_right.clear();
+        
         while(true){
-            is_nan = false;
-            q_vec_right_arm = baxter_traj_streamer.get_q_vec_right_arm_Xd();
-
+                is_nan = false;
+                q_vec_right_arm = baxter_traj_streamer.get_q_vec_right_arm_Xd();
             for(int i = 0; i < 7; ++i){
-                if (isnan(q_vec_right_arm[i]) == 1){
-                    is_nan = true;
-                }
-            }
+        		if (isnan(q_vec_right_arm[i]) == 1){
+        			is_nan = true;
+        		}
+        	}
             if(!is_nan){
                 break;
             }
 
         }  
-        //if (!is_nan){
-        current_location = baxter_fwd_solver.fwd_kin_flange_wrt_torso_solve(q_vec_right_arm);
-        //}
-            
-        std::cout << current_location.translation() << std::endl;
-        ROS_INFO("Current joint position");
-        std::cout << q_vec_right_arm << std::endl;
+    	//if (!is_nan){
+    	current_location = baxter_fwd_solver.fwd_kin_flange_wrt_torso_solve(q_vec_right_arm);
+    	//}
+    	
+       	
+       	std::cout << current_location.translation() << std::endl;
+    	ROS_INFO("Current joint position");
+    	std::cout << q_vec_right_arm << std::endl;
 
-        des_path_right.push_back(q_vec_right_arm);
+    	des_path_right.push_back(q_vec_right_arm);
 
         // Initial arm pose of tool
 
-        p_des[0] = current_location.translation()[0];
-        p_des[1] = current_location.translation()[1];
-        p_des[2] = current_location.translation()[2];
-        a_toolflange_start.translation() = p_des;
+    	p_des[0] = current_location.translation()[0];
+    	p_des[1] = current_location.translation()[1];
+    	p_des[2] = current_location.translation()[2];
+    	a_toolflange_start.translation() = p_des;
 
-        // get desired pose from call back of 
-        polaris_pose = get_polaris_arm_pose();
-        get_polaris == false;
+    	// get desired pose from call back of 
+    	polaris_pose = get_polaris_arm_pose();
+    	get_polaris == false;
 
-        // change the polaris pose and add constants to fit baxter more appropriately
-        p_des[0] = polaris_pose.poses[0].position.x;
-        p_des[1] = polaris_pose.poses[0].position.y;
-        p_des[2] = polaris_pose.poses[0].position.z;
-        a_toolflange_end.translation() = p_des;
+    	// change the polaris pose and add constants to fit baxter more appropriately
+    	p_des[0] = polaris_pose.poses[0].position.x;
+    	p_des[1] = polaris_pose.poses[0].position.y;
+    	p_des[2] = polaris_pose.poses[0].position.z;
+    	a_toolflange_end.translation() = p_des;
 
         found_path = cartTrajPlanner.cartesian_path_planner(q_vec_right_arm, a_toolflange_end, optimal_path);
 
-        if (found_path) {
+    	if (found_path) {
             ROS_INFO("found path");
-            des_path_right.push_back(optimal_path[0]);
-            baxter_traj_streamer.stuff_trajectory_right_arm(optimal_path, des_trajectory_right);
-            //  copy traj to goal:
-            goal_right.trajectory = des_trajectory_right;
+    		des_path_right.push_back(optimal_path[0]);
+    		baxter_traj_streamer.stuff_trajectory_right_arm(optimal_path, des_trajectory_right);
+    		//  copy traj to goal:
+    		goal_right.trajectory = des_trajectory_right;
 
-            ROS_INFO("sending goals to left and right arms: ");
-            right_arm_action_client.sendGoal(goal_right, &rightArmDoneCb); 
+    		ROS_INFO("sending goals to left and right arms: ");
+    		//right_arm_action_client.sendGoal(goal_right, &rightArmDoneCb); 
 
+            //path_action( optimal_path);
 
-            int counter = 0;
-            while (g_done_count<1) {
-                ROS_INFO("waiting to finish current move");
-                ros::spinOnce();
-                ros::Duration(0.01).sleep();
+            ros::Time start = ros::Time::now();
+            ros::Rate loop_rate(100);
 
-                //if (counter > 10 && get_polaris){
-                //g_done_count = 1;
-                //}
-                counter++;
+            for(int k=optimal_path.size()-1; k>-1;k--){ //to avoid parent index       
+                for(int i=0; i<7; i++){
+                    cmd.command[i]=optimal_path[k][i];
+                }
+
+                start = ros::Time::now();
+                while((ros::Time::now() - start) < ros::Duration(0.1)) {
+                    action_publisher.publish(cmd);
+                    ros::spinOnce();
+                    loop_rate.sleep();
+
+                }
             }
-            g_done_count = 0;
-        
 
-        }
+
+    		int counter = 0;
+            /*while (g_done_count<1) {
+               ROS_INFO("waiting to finish current move");
+               ros::spinOnce();
+               ros::Duration(0.01).sleep();
+               
+               //if (counter > 10 && get_polaris){
+                //g_done_count = 1;
+               //}
+               counter++;
+            }*/
+            g_done_count = 0;
+    	
+      	} 
         else {
             ROS_WARN("no path found");
             ros::Duration(0.01).sleep();
         }
-        ros::Duration(0.01).sleep();
-        ros::spinOnce();
-        ROS_WARN("at the end");
+    	ros::Duration(0.01).sleep();
+    	ros::spinOnce();
+    	ROS_WARN("at the end");
 
-        // send out new desired arm position of arm
+    	// send out new desired arm position of arm
     }
 
 return 0;
 
 }
+

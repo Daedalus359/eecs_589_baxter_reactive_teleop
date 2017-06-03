@@ -32,6 +32,8 @@ catkin_simple()
 # Executables: uncomment the following and edit arguments to compile new nodes
 # may add more of these lines for more nodes from the same package
 cs_add_executable(robotics_two_coordinator src/robotics_two_coordinator.cpp)
+cs_add_executable(ammar_coordinator src/ammar_coordinator.cpp)
+
 cs_add_executable(publish_fake_polaris src/publish_fake_polaris.cpp)
 
 #the following is required, if desire to link a node in this package with a library created in this same package
